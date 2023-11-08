@@ -1,5 +1,11 @@
 package main
 
+import (
+	"github.com/DavidGQK/go-loyalty-system/internal/config"
+	"github.com/DavidGQK/go-loyalty-system/internal/logger"
+	"github.com/DavidGQK/go-loyalty-system/internal/store"
+)
+
 func main() {
 	if err := run(); err != nil {
 		panic(err)
@@ -7,7 +13,7 @@ func main() {
 }
 
 func run() error {
-	settings := config.Initialize()
+	settings := config.GetConfig()
 
 	if err := logger.Initialize(settings.LoggingLevel); err != nil {
 		return err

@@ -3,6 +3,8 @@ package main
 import (
 	"github.com/DavidGQK/go-loyalty-system/internal/config"
 	"github.com/DavidGQK/go-loyalty-system/internal/logger"
+	"github.com/DavidGQK/go-loyalty-system/internal/router"
+	"github.com/DavidGQK/go-loyalty-system/internal/server"
 	"github.com/DavidGQK/go-loyalty-system/internal/store"
 )
 

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/DavidGQK/go-loyalty-system/internal/logger"
+	"github.com/DavidGQK/go-loyalty-system/internal/services/mycrypto"
 	"github.com/DavidGQK/go-loyalty-system/internal/store"
 	"github.com/gin-gonic/gin"
 	"net/http"

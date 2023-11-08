@@ -1,20 +1,17 @@
 package server
 
 import (
+	"context"
+	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/DavidGQK/go-loyalty-system/internal/logger"
+	"github.com/DavidGQK/go-loyalty-system/internal/services/mycrypto"
 	"github.com/DavidGQK/go-loyalty-system/internal/store"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4"
 	"net/http"
 	"time"
-)
-
-"github.com/golang-jwt/jwt/v4"
-
-"github.com/arseniy96/bonus-program/internal/logger"
-"github.com/arseniy96/bonus-program/internal/services/mycrypto"
-"github.com/arseniy96/bonus-program/internal/store"
 )
 
 const (

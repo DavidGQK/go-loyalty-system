@@ -1,6 +1,10 @@
 package router
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/DavidGQK/go-loyalty-system/internal/middleware"
+	"github.com/DavidGQK/go-loyalty-system/internal/server"
+	"github.com/gin-gonic/gin"
+)
 
 type Router interface {
 	Run(addr ...string) error
@@ -8,7 +12,7 @@ type Router interface {
 
 func NewRouter(s *server.Server) Router {
 	g := gin.Default()
-	g.Use(middlewares.AuthMiddleware(s.Repository))
+	g.Use(middleware.AuthMiddleware(s.Repository))
 	g.GET("/ping", s.PingHandler)
 	g.POST("/api/user/register", s.SignUp)
 	g.POST("/api/user/login", s.Login)

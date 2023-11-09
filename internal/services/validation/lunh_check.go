@@ -1,4 +1,4 @@
-package valitdation
+package validation
 
 import "github.com/ShiraazMoollatjie/goluhn"
 

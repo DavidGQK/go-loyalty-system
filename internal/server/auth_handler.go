@@ -30,31 +30,32 @@ func (s *Server) SignUp(c *gin.Context) {
 	var body SignUpRequest
 	decoder := json.NewDecoder(c.Request.Body)
 	if err := decoder.Decode(&body); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
+		_ = c.AbortWithError(http.StatusBadRequest, err)
+		return
 	}
 
 	hPass := mycrypto.HashFunc(body.Password)
 	if err := s.Repository.CreateUser(ctx, body.Login, hPass); err != nil {
 		if errors.Is(err, store.ErrConflict) {
-			c.AbortWithError(http.StatusConflict, fmt.Errorf("user already exists"))
+			_ = c.AbortWithError(http.StatusConflict, fmt.Errorf("user already exists"))
 			return
 		}
 		logger.Log.Errorf("create user error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
 	token, err := mycrypto.CreateRandomToken(16)
 	if err != nil {
 		logger.Log.Errorf("build token error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 	hashToken := mycrypto.HashFunc(token)
 	tokenExp := time.Now().Add(TokenExp)
 	if err := s.Repository.UpdateUserToken(ctx, body.Login, hashToken, tokenExp); err != nil {
 		logger.Log.Errorf("update user error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
@@ -69,7 +70,7 @@ func (s *Server) Login(c *gin.Context) {
 	var body LoginRequest
 	decoder := json.NewDecoder(c.Request.Body)
 	if err := decoder.Decode(&body); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
+		_ = c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 
@@ -77,28 +78,28 @@ func (s *Server) Login(c *gin.Context) {
 	user, err := s.Repository.FindUserByLogin(ctx, body.Login)
 	if err != nil {
 		if errors.Is(err, store.ErrNowRows) {
-			c.AbortWithError(http.StatusUnauthorized, err)
+			_ = c.AbortWithError(http.StatusUnauthorized, err)
 			return
 		}
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 	if user.Password != hPass {
-		c.AbortWithError(http.StatusUnauthorized, fmt.Errorf("invalid password"))
+		_ = c.AbortWithError(http.StatusUnauthorized, fmt.Errorf("invalid password"))
 		return
 	}
 
 	token, err := mycrypto.CreateRandomToken(16)
 	if err != nil {
 		logger.Log.Errorf("build token error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 	hashToken := mycrypto.HashFunc(token)
 	tokenExp := time.Now().Add(TokenExp)
 	if err := s.Repository.UpdateUserToken(ctx, body.Login, hashToken, tokenExp); err != nil {
 		logger.Log.Errorf("update user error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 

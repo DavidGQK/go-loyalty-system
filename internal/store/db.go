@@ -11,6 +11,7 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jackc/pgerrcode"
 	"github.com/jackc/pgx/v5/pgconn"
+	_ "github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 	"time"
 )
@@ -44,6 +45,7 @@ func (db *Database) Close() error {
 
 func runMigrations(dsn string) error {
 	const migrationsPath = "db/migrations"
+	fmt.Println("start migrations")
 	m, err := migrate.New(fmt.Sprintf("file://%s", migrationsPath), dsn)
 	if err != nil {
 		return fmt.Errorf("failed to get a new migrate instance: %w", err)
@@ -200,7 +202,12 @@ func (db *Database) UpdateOrderStatus(ctx context.Context, order *Order, status 
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
+	defer func() {
+		if err := recover(); err != nil {
+			_ = tx.Rollback()
+			return
+		}
+	}()
 
 	_, err = tx.ExecContext(ctx,
 		`UPDATE orders SET status=$1 WHERE id=$2`,
@@ -276,7 +283,12 @@ func (db *Database) SaveWithdrawBonuses(ctx context.Context, userID int, orderNu
 	if err != nil {
 		return err
 	}
-	defer tx.Rollback()
+	defer func() {
+		if err := recover(); err != nil {
+			_ = tx.Rollback()
+			return
+		}
+	}()
 
 	var orderID int
 	err = tx.QueryRowContext(ctx,

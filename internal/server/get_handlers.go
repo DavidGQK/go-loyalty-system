@@ -24,13 +24,13 @@ func (s *Server) GetOrders(c *gin.Context) {
 	user, err := s.Repository.FindUserByToken(ctx, token)
 	if err != nil {
 		logger.Log.Errorf("find user error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 	orders, err := s.Repository.FindOrdersByUserID(ctx, user.ID)
 	if err != nil {
 		logger.Log.Errorf("find orders error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 	if len(orders) == 0 {
@@ -65,14 +65,14 @@ func (s *Server) GetUserBalance(c *gin.Context) {
 	user, err := s.Repository.FindUserByToken(ctx, token)
 	if err != nil {
 		logger.Log.Errorf("find user error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
 	withdrawalSum, err := s.Repository.GetWithdrawalSumByUserID(ctx, user.ID)
 	if err != nil {
 		logger.Log.Errorf("find bonus_transactions error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
@@ -91,14 +91,14 @@ func (s *Server) GetUserWithdrawals(c *gin.Context) {
 	user, err := s.Repository.FindUserByToken(ctx, token)
 	if err != nil {
 		logger.Log.Errorf("find user error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
 	bonusTransactions, err := s.Repository.FindBonusTransactionsByUserID(ctx, user.ID)
 	if err != nil {
 		logger.Log.Errorf("find bonus_transactions error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 	var response GetUserWithdrawalsResponse

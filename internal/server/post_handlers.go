@@ -24,17 +24,17 @@ func (s *Server) UploadOrderHandler(c *gin.Context) {
 	user, err := s.Repository.FindUserByToken(ctx, token)
 	if err != nil {
 		logger.Log.Errorf("find user error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
 	orderNumber, err := io.ReadAll(c.Request.Body)
 	if err != nil || len(orderNumber) == 0 {
-		c.AbortWithError(http.StatusBadRequest, fmt.Errorf("request error"))
+		_ = c.AbortWithError(http.StatusBadRequest, fmt.Errorf("request error"))
 		return
 	}
 	if err := validation.LuhnValidate(string(orderNumber)); err != nil {
-		c.AbortWithError(http.StatusUnprocessableEntity, fmt.Errorf("invalid order_number"))
+		_ = c.AbortWithError(http.StatusUnprocessableEntity, fmt.Errorf("invalid order_number"))
 		return
 	}
 
@@ -44,7 +44,7 @@ func (s *Server) UploadOrderHandler(c *gin.Context) {
 			order, err = s.Repository.CreateOrder(ctx, user.ID, string(orderNumber), store.OrderStatusNew)
 			if err != nil {
 				logger.Log.Errorf("create order error: %v", err)
-				c.AbortWithError(http.StatusInternalServerError, fmt.Errorf("save order error %v", err))
+				_ = c.AbortWithError(http.StatusInternalServerError, fmt.Errorf("save order error %v", err))
 				return
 			}
 			s.OrdersQueue <- order // кладём в очередь для фоновой обработки
@@ -52,7 +52,7 @@ func (s *Server) UploadOrderHandler(c *gin.Context) {
 			c.String(http.StatusAccepted, "order saved")
 			return
 		}
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
@@ -65,7 +65,7 @@ func (s *Server) UploadOrderHandler(c *gin.Context) {
 		return
 	}
 
-	c.AbortWithError(http.StatusConflict, fmt.Errorf("order already exists"))
+	_ = c.AbortWithError(http.StatusConflict, fmt.Errorf("order already exists"))
 }
 
 func (s *Server) WithdrawHandler(c *gin.Context) {
@@ -77,28 +77,28 @@ func (s *Server) WithdrawHandler(c *gin.Context) {
 	user, err := s.Repository.FindUserByToken(ctx, token)
 	if err != nil {
 		logger.Log.Errorf("find user error: %v", err)
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 
 	var body WithdrawRequest
 	decoder := json.NewDecoder(c.Request.Body)
 	if err := decoder.Decode(&body); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
+		_ = c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
 	if body.Sum > converter.ConvertFromCent(user.Bonuses) {
-		c.AbortWithError(http.StatusPaymentRequired, fmt.Errorf("insufficient funds"))
+		_ = c.AbortWithError(http.StatusPaymentRequired, fmt.Errorf("insufficient funds"))
 		return
 	}
 	if body.Sum == 0 {
-		c.AbortWithError(http.StatusBadRequest, fmt.Errorf("invalid amount"))
+		_ = c.AbortWithError(http.StatusBadRequest, fmt.Errorf("invalid amount"))
 		return
 	}
 
 	err = s.Repository.SaveWithdrawBonuses(ctx, user.ID, body.Order, converter.ConvertToCent(body.Sum))
 	if err != nil {
-		c.AbortWithError(http.StatusInternalServerError, err)
+		_ = c.AbortWithError(http.StatusInternalServerError, err)
 		return
 	}
 

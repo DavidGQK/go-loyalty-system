@@ -25,7 +25,7 @@ func AuthMiddleware(r repository) gin.HandlerFunc {
 
 		authHeader := c.GetHeader("Authorization")
 		if err := checkHeader(r, authHeader); err != nil {
-			c.AbortWithError(http.StatusUnauthorized, err)
+			_ = c.AbortWithError(http.StatusUnauthorized, err)
 			return
 		}
 

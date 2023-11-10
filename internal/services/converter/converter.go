@@ -1,6 +1,6 @@
 package converter
 
-const multiplier = 100
+const multiplier = 100000
 
 func ConvertToCent(amount float64) int {
 	return int(amount * multiplier)

@@ -216,7 +216,6 @@ func (db *Database) UpdateOrderStatus(ctx context.Context, order *Order, status 
 		return err
 	}
 
-	// если бонусы не начислены, не надо ничего обновлять
 	if bonus != 0 {
 		_, err = tx.ExecContext(ctx,
 			`INSERT INTO bonus_transactions(amount, type, user_id, order_id) VALUES($1, $2, $3, $4)`,

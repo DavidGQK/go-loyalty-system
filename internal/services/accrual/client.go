@@ -34,7 +34,7 @@ func (c *Client) GetOrderRequest(url string) (*GetOrderResponse, error) {
 	}
 
 	r := GetOrderResponse{
-		Accrual: 0, // default value
+		Accrual: 0,
 	}
 	err = json.NewDecoder(resp.Body).Decode(&r)
 	if err != nil {

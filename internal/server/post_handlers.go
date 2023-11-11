@@ -47,7 +47,7 @@ func (s *Server) UploadOrderHandler(c *gin.Context) {
 				_ = c.AbortWithError(http.StatusInternalServerError, fmt.Errorf("save order error %v", err))
 				return
 			}
-			s.OrdersQueue <- order // кладём в очередь для фоновой обработки
+			s.OrdersQueue <- order
 
 			c.String(http.StatusAccepted, "order saved")
 			return

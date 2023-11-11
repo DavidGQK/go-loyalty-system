@@ -35,7 +35,6 @@ func (s *Server) OrdersWorker() {
 				}
 
 				if !hasFinalStatus(res.Status) {
-					// система ещё не обработала заказ – отправляем обратно в очередь
 					logger.Log.Debugw("accrual has not processed the order yet",
 						"order_number", order.OrderNumber,
 						"current_accrual_status", res.Status)

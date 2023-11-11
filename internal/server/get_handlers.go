@@ -46,7 +46,7 @@ func (s *Server) GetOrders(c *gin.Context) {
 			UploadedAt: order.CreatedAt.Format(time.RFC3339),
 		}
 
-		ac := converter.ConvertFromCent(order.BonusAmount) // FIXME: Не знаю, как сделать по-другому
+		ac := converter.ConvertFromCent(order.BonusAmount)
 		if ac != 0 {
 			orderResp.Accrual = ac
 		}
@@ -77,8 +77,8 @@ func (s *Server) GetUserBalance(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, GetUserBalanceResponse{
-		Current:   converter.ConvertFromCent(user.Bonuses),  // в БД храним в копейках
-		Withdrawn: converter.ConvertFromCent(withdrawalSum), // в БД храним в копейках
+		Current:   converter.ConvertFromCent(user.Bonuses),
+		Withdrawn: converter.ConvertFromCent(withdrawalSum),
 	})
 }
 

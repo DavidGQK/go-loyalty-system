@@ -17,7 +17,7 @@ func HashFunc(str string) string {
 
 func CreateRandomToken(size int) (string, error) {
 	b := make([]byte, size)
-	_, err := rand.Read(b) // записываем байты в слайс b
+	_, err := rand.Read(b)
 	if err != nil {
 		return "", fmt.Errorf("%v", err)
 	}

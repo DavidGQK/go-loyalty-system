@@ -2,11 +2,7 @@ package config
 
 import (
 	"flag"
-	"github.com/joho/godotenv"
-	"log"
 	"os"
-	"path/filepath"
-	"strconv"
 )
 
 type Config struct {
@@ -51,18 +47,5 @@ func New() *Config {
 	loadFlagConfig(&AppConfig)
 	loadEnvConfig(&AppConfig)
 
-	wd, _ := os.Getwd()
-	envFile, err := godotenv.Read(filepath.Join(wd, "config.env"))
-	if err != nil {
-		log.Fatal("Error loading config.env file")
-	}
-
-	AppConfig.SecretKey = envFile["SECRET_KEY"]
-	AppConfig.Multiplier, _ = strconv.Atoi(envFile["MULTIPLIER"])
-
-	return &AppConfig
-}
-
-func GetConfig() *Config {
 	return &AppConfig
 }

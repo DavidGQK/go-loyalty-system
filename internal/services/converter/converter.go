@@ -1,7 +1,6 @@
 package converter
 
-// var multiplier = float64(config.GetConfig().Multiplier)
-const multiplier = 100000
+const multiplier = 100000 // with config autotests don't pass
 
 func ConvertToCent(amount float64) int {
 	return int(amount * multiplier)

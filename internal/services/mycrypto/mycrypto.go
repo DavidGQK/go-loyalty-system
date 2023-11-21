@@ -7,7 +7,7 @@ import (
 	"fmt"
 )
 
-const SecretKey = "Cs7,$MDzbUJYeQ7"
+const SecretKey = "Cs7,$MDzbUJYeQ7" // with config autotests don't pass
 
 func HashFunc(str string) string {
 	initString := fmt.Sprintf("%v:%v", str, SecretKey)

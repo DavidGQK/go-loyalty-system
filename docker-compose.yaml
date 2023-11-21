@@ -1,0 +1,20 @@
+version: '3'
+services:
+  postgres_go_loyalty_system_db:
+    container_name: postgres_go_loyalty_system_db
+    image: postgres:13.7-alpine3.15
+    restart: always
+    ports:
+      - "5432:5432"
+    expose:
+      - "5432"
+    volumes:
+      - /postgres_go_loyalty_system/data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    networks:
+      - go_loyalty_system_network
+
+networks:
+  go_loyalty_system_network:
+    driver: bridge

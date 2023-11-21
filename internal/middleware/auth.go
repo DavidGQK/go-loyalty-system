@@ -4,18 +4,18 @@ import (
 	"context"
 	"fmt"
 	"github.com/DavidGQK/go-loyalty-system/internal/logger"
+	"github.com/DavidGQK/go-loyalty-system/internal/server"
 	"github.com/DavidGQK/go-loyalty-system/internal/services/mycrypto"
-	"github.com/DavidGQK/go-loyalty-system/internal/store"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
 )
 
-type repository interface {
-	FindUserByToken(context.Context, string) (*store.User, error)
-}
+//type repository interface {
+//	FindUserByToken(context.Context, string) (*store.User, error)
+//}
 
-func AuthMiddleware(r repository) gin.HandlerFunc {
+func AuthMiddleware(r server.Repository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")
 		if err := checkHeader(r, authHeader); err != nil {
@@ -27,7 +27,7 @@ func AuthMiddleware(r repository) gin.HandlerFunc {
 	}
 }
 
-func checkHeader(r repository, header string) error {
+func checkHeader(r server.Repository, header string) error {
 	if len(header) == 0 {
 		return fmt.Errorf("missing Authorization header")
 	}

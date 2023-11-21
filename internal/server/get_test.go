@@ -18,7 +18,7 @@ func TestServer_GetOrders(t *testing.T) {
 	defer ctrl.Finish()
 	createdAt, err := time.Parse("01/02/2006 15:04:05", "07/24/2023 15:15:45")
 	if err != nil {
-		panic(err)
+		t.Fatal(err)
 	}
 
 	m := mocks.NewMockRepository(ctrl)

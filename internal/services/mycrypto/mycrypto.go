@@ -5,12 +5,11 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
+	"github.com/DavidGQK/go-loyalty-system/internal/config"
 )
 
-const SecretKey = "Cs7,$MDzbUJYeQ7"
-
 func HashFunc(str string) string {
-	initString := fmt.Sprintf("%v:%v", str, SecretKey)
+	initString := fmt.Sprintf("%v:%v", str, config.GetConfig().SecretKey)
 
 	return fmt.Sprintf("%x", md5.Sum([]byte(initString)))
 }

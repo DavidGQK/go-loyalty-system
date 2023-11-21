@@ -2,7 +2,10 @@ package config
 
 import (
 	"flag"
+	"github.com/joho/godotenv"
+	"log"
 	"os"
+	"strconv"
 )
 
 type Config struct {
@@ -10,7 +13,11 @@ type Config struct {
 	DatabaseURI  string
 	LoggingLevel string
 	AccrualHost  string
+	SecretKey    string
+	Multiplier   int
 }
+
+var AppConfig Config
 
 func loadFlagConfig(AppConfig *Config) {
 	flag.StringVar(&AppConfig.Host, "a", "localhost:8080", "url where server runs on")
@@ -39,11 +46,21 @@ func loadEnvConfig(AppConfig *Config) {
 	}
 }
 
-func GetConfig() *Config {
-	var AppConfig Config
-
+func New() *Config {
 	loadFlagConfig(&AppConfig)
 	loadEnvConfig(&AppConfig)
 
+	envFile, err := godotenv.Read("config.env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	AppConfig.SecretKey = envFile["SECRET_KEY"]
+	AppConfig.Multiplier, _ = strconv.Atoi(envFile["MULTIPLIER"])
+
+	return &AppConfig
+}
+
+func GetConfig() *Config {
 	return &AppConfig
 }

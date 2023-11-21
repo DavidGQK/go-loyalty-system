@@ -7,15 +7,14 @@ const (
 	OrderStatusInvalid    = "INVALID"
 	OrderStatusProcessing = "PROCESSING"
 	OrderStatusProcessed  = "PROCESSED"
-	GetOrderPath          = "/api/orders/"
 )
 
-func CheckOrder(host, orderNumber string) (*GetOrderResponse, error) {
-	fullURL, err := url.JoinPath(host, GetOrderPath, orderNumber)
+func CheckOrder(host, orderNumber string) (*OrderResponse, error) {
+	fullURL, err := url.JoinPath(host, "/api/orders/", orderNumber)
 	if err != nil {
 		return nil, err
 	}
-	client := InitClient()
+	client := NewClient()
 
 	return client.GetOrderRequest(fullURL)
 }

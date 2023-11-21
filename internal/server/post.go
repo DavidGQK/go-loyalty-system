@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/DavidGQK/go-loyalty-system/internal/logger"
 	"github.com/DavidGQK/go-loyalty-system/internal/services/converter"
@@ -40,7 +41,7 @@ func (s *Server) UploadOrderHandler(c *gin.Context) {
 
 	order, err := s.Repository.FindOrderByOrderNumber(ctx, string(orderNumber))
 	if err != nil {
-		if err == store.ErrNowRows {
+		if errors.Is(err, store.ErrNowRows) {
 			order, err = s.Repository.CreateOrder(ctx, user.ID, string(orderNumber), store.OrderStatusNew)
 			if err != nil {
 				logger.Log.Errorf("create order error: %v", err)

@@ -1,6 +1,8 @@
 package converter
 
-const multiplier = 100000
+import "github.com/DavidGQK/go-loyalty-system/internal/config"
+
+var multiplier = float64(config.GetConfig().Multiplier)
 
 func ConvertToCent(amount float64) int {
 	return int(amount * multiplier)

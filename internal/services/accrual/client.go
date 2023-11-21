@@ -12,7 +12,7 @@ type Client struct {
 	HTTPClient *pester.Client
 }
 
-func InitClient() *Client {
+func NewClient() *Client {
 	client := pester.New()
 	client.MaxRetries = 3
 	client.KeepLog = true
@@ -22,7 +22,7 @@ func InitClient() *Client {
 	}
 }
 
-func (c *Client) GetOrderRequest(url string) (*GetOrderResponse, error) {
+func (c *Client) GetOrderRequest(url string) (*OrderResponse, error) {
 	resp, err := c.HTTPClient.Get(url)
 	if err != nil {
 		logger.Log.Errorf("accrual request error: %v", c.HTTPClient.LogString())
@@ -33,7 +33,7 @@ func (c *Client) GetOrderRequest(url string) (*GetOrderResponse, error) {
 		return nil, fmt.Errorf("invalid status in accrual response: %v", resp.Status)
 	}
 
-	r := GetOrderResponse{
+	r := OrderResponse{
 		Accrual: 0,
 	}
 	err = json.NewDecoder(resp.Body).Decode(&r)

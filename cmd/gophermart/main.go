@@ -15,15 +15,15 @@ func main() {
 }
 
 func run() error {
-	settings := config.GetConfig()
+	settings := config.New()
 
-	if err := logger.Initialize(settings.LoggingLevel); err != nil {
+	if err := logger.New(settings.LoggingLevel); err != nil {
 		return err
 	}
 
 	rep, err := store.NewStore(settings.DatabaseURI)
 	if err != nil {
-		panic(err)
+		logger.Log.Fatal("error during db initialization", err)
 	}
 	defer rep.Close()
 

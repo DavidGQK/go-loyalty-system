@@ -11,10 +11,6 @@ import (
 	"time"
 )
 
-//type repository interface {
-//	FindUserByToken(context.Context, string) (*store.User, error)
-//}
-
 func AuthMiddleware(r server.Repository) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.GetHeader("Authorization")

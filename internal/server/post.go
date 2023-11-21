@@ -17,11 +17,10 @@ import (
 )
 
 func (s *Server) UploadOrderHandler(c *gin.Context) {
-	authHeader := c.GetHeader("Authorization")
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	token := mycrypto.HashFunc(authHeader)
+	token := mycrypto.HashFunc(c.GetHeader("Authorization"))
 	user, err := s.Repository.FindUserByToken(ctx, token)
 	if err != nil {
 		logger.Log.Errorf("find user error: %v", err)
@@ -70,11 +69,10 @@ func (s *Server) UploadOrderHandler(c *gin.Context) {
 }
 
 func (s *Server) WithdrawHandler(c *gin.Context) {
-	authHeader := c.GetHeader("Authorization")
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	token := mycrypto.HashFunc(authHeader)
+	token := mycrypto.HashFunc(c.GetHeader("Authorization"))
 	user, err := s.Repository.FindUserByToken(ctx, token)
 	if err != nil {
 		logger.Log.Errorf("find user error: %v", err)

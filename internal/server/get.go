@@ -16,11 +16,10 @@ func (s *Server) PingHandler(c *gin.Context) {
 }
 
 func (s *Server) GetOrders(c *gin.Context) {
-	authHeader := c.GetHeader("Authorization")
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	token := mycrypto.HashFunc(authHeader)
+	token := mycrypto.HashFunc(c.GetHeader("Authorization"))
 	user, err := s.Repository.FindUserByToken(ctx, token)
 	if err != nil {
 		logger.Log.Errorf("find user error: %v", err)
@@ -57,11 +56,10 @@ func (s *Server) GetOrders(c *gin.Context) {
 }
 
 func (s *Server) GetUserBalance(c *gin.Context) {
-	authHeader := c.GetHeader("Authorization")
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	token := mycrypto.HashFunc(authHeader)
+	token := mycrypto.HashFunc(c.GetHeader("Authorization"))
 	user, err := s.Repository.FindUserByToken(ctx, token)
 	if err != nil {
 		logger.Log.Errorf("find user error: %v", err)
@@ -83,11 +81,10 @@ func (s *Server) GetUserBalance(c *gin.Context) {
 }
 
 func (s *Server) GetUserWithdrawals(c *gin.Context) {
-	authHeader := c.GetHeader("Authorization")
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	token := mycrypto.HashFunc(authHeader)
+	token := mycrypto.HashFunc(c.GetHeader("Authorization"))
 	user, err := s.Repository.FindUserByToken(ctx, token)
 	if err != nil {
 		logger.Log.Errorf("find user error: %v", err)

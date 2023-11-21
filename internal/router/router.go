@@ -12,14 +12,18 @@ type Router interface {
 
 func NewRouter(s *server.Server) Router {
 	g := gin.Default()
-	g.Use(middleware.AuthMiddleware(s.Repository))
 	g.GET("/ping", s.PingHandler)
-	g.GET("/api/user/orders", s.GetOrders)
-	g.GET("/api/user/balance", s.GetUserBalance)
-	g.GET("/api/user/withdrawals", s.GetUserWithdrawals)
 	g.POST("/api/user/register", s.SignUp)
 	g.POST("/api/user/login", s.Login)
-	g.POST("/api/user/orders", s.UploadOrderHandler)
-	g.POST("/api/user/balance/withdraw", s.WithdrawHandler)
+
+	private := g.Group("/api/user")
+	private.Use(middleware.AuthMiddleware(s.Repository))
+	{
+		private.GET("/orders", s.GetOrders)
+		private.GET("/balance", s.GetUserBalance)
+		private.GET("/withdrawals", s.GetUserWithdrawals)
+		private.POST("/orders", s.UploadOrderHandler)
+		private.POST("/balance/withdraw", s.WithdrawHandler)
+	}
 	return g
 }

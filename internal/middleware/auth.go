@@ -17,12 +17,6 @@ type repository interface {
 
 func AuthMiddleware(r repository) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		path := c.Request.URL.Path
-		if path == `/api/user/register` || path == `/api/user/login` {
-			c.Next()
-			return
-		}
-
 		authHeader := c.GetHeader("Authorization")
 		if err := checkHeader(r, authHeader); err != nil {
 			_ = c.AbortWithError(http.StatusUnauthorized, err)

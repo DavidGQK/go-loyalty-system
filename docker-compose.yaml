@@ -11,7 +11,7 @@ services:
     volumes:
       - /postgres_go_loyalty_system/data:/var/lib/postgresql/data
     env_file:
-      - .env
+      - config.env
     networks:
       - go_loyalty_system_network
 

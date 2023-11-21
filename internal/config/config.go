@@ -5,6 +5,7 @@ import (
 	"github.com/joho/godotenv"
 	"log"
 	"os"
+	"path/filepath"
 	"strconv"
 )
 
@@ -50,9 +51,10 @@ func New() *Config {
 	loadFlagConfig(&AppConfig)
 	loadEnvConfig(&AppConfig)
 
-	envFile, err := godotenv.Read("config.env")
+	wd, _ := os.Getwd()
+	envFile, err := godotenv.Read(filepath.Join(wd, "config.env"))
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Fatal("Error loading config.env file")
 	}
 
 	AppConfig.SecretKey = envFile["SECRET_KEY"]
